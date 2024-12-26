@@ -1,6 +1,10 @@
 name: 'Cache .next folder'
 description: 'Cache Next.js for faster application rebuilds.'
 inputs:
+  use-blacksmith:
+    description: 'Use Blacksmith to cache the .next folder'
+    required: false
+    default: 'true'
   cwd:
     description: "Changes node's process.cwd() if the project is not located on the root. Default to process.cwd()"
     required: false
@@ -10,6 +14,17 @@ runs:
   using: 'composite'
   steps:
     - uses: actions/cache@v4
+      if: inputs.use-blacksmith == 'false'
+      with:
+        path: |
+          ${{ github.workspace }}/${{ inputs.cwd }}/.next/cache
+        key: |
+          ${{ runner.os }}-nextjs-${{ inputs.cwd }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-nextjs-${{ inputs.cwd }}-
+
+    - uses: useblacksmith/cache@v5
+      if: inputs.use-blacksmith == 'true'
       with:
         path: |
           ${{ github.workspace }}/${{ inputs.cwd }}/.next/cache

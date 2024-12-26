@@ -13,7 +13,6 @@ runs:
       id: read-cache
       shell: bash
       run: |
-        # Append repo name to key
         REPO_NAME="${GITHUB_REPOSITORY}"
         CACHE_KEY="${REPO_NAME}:${{ inputs.key }}"
 

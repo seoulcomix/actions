@@ -1,0 +1,21 @@
+name: 'Set key value cache'
+inputs:
+  key:
+    required: true
+  value:
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set value to cache
+      shell: bash
+      run: |
+        # Append repo name to key
+        REPO_NAME="${GITHUB_REPOSITORY}"
+        CACHE_KEY="${REPO_NAME}:${{ inputs.key }}"
+
+        curl -X POST "https://api.hub.seoulcomix.com/kv/set" \
+          -H "Content-Type: application/json" \
+          -d "{\"key\": \"${CACHE_KEY}\", \"value\": \"${{ inputs.value }}\"}"
+        echo "Debug: Set value '${{ inputs.value }}' to API for key '${CACHE_KEY}'"

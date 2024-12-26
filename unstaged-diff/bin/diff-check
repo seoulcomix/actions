@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+count=$(git ls-files --others --modified --exclude-standard | wc -l)
+
+if [ "$count" -gt 0 ]; then
+	printf 'These files changed when running the command:\n\n'
+
+	git ls-files --others --modified --exclude-standard | while read -r n ; do
+		echo "* \`$n\`"
+	done
+
+	exit 1
+fi

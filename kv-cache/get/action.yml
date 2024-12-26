@@ -1,0 +1,27 @@
+name: 'Get key value cache'
+inputs:
+  key:
+    required: true
+outputs:
+  value:
+    value: ${{ steps.read-cache.outputs.value }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Read cache value
+      id: read-cache
+      shell: bash
+      run: |
+        # Append repo name to key
+        REPO_NAME="${GITHUB_REPOSITORY}"
+        CACHE_KEY="${REPO_NAME}:${{ inputs.key }}"
+
+        value=$(curl -s -X GET "https://api.hub.seoulcomix.com/kv/get/${CACHE_KEY}")
+        if [ -n "$value" ]; then
+          echo "value=$value" >> $GITHUB_OUTPUT
+          echo "Debug: Read value '$value' from API"
+        else
+          echo "value=" >> $GITHUB_OUTPUT
+          echo "Debug: No value found in API, setting empty value"
+        fi

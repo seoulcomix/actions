@@ -38,3 +38,22 @@
   with:
     command: yarn lint
 ```
+
+#### 📥 KV (Key-Value) cache (get)
+
+```yaml
+- name: 📥 KV cache get
+  uses: seoulcomix/actions/kv-cache/get@main
+  with:
+    key: test-key
+```
+
+#### 📥 KV (Key-Value) cache (set)
+
+```yaml
+- name: 📥 KV cache set
+  uses: seoulcomix/actions/kv-cache/set@main
+  with:
+    key: test-key
+    value: test-value
+```
